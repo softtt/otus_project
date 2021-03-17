@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\Tasks;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +13,7 @@ class TaskStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class TaskStoreRequest extends FormRequest
         return [
             'name' => ['string', 'required', 'max:255'],
             'description' => ['string', 'required', 'max:255'],
-            'difficulty' => ['integer']
+            'difficulty' => ['numeric','min:0','max:10']
         ];
     }
 }
