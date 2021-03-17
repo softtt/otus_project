@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Skills;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Skills\SkillStoreRequest;
+use App\Http\Requests\Skills\SkillUpdateRequest;
 use App\Services\Api\Skill\SkillApiService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -34,17 +35,17 @@ class SkillApiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param SkillStoreRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function store(Request $request, int $id): JsonResponse
+    public function store(SkillStoreRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
-        $this->getApiService()->updateSkill($validatedData, $id);
+        $this->getApiService()->createSkill($validatedData);
 
-        return response()->json(array('updated' => true));
+        return response()->json(array('created' => true));
     }
 
     /**
@@ -53,7 +54,7 @@ class SkillApiController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         $skill = $this->getApiService()->getSkill($id);
 
@@ -68,11 +69,11 @@ class SkillApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param SkillUpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function update(Request $request,int $id): JsonResponse
+    public function update(SkillUpdateRequest $request,int $id): JsonResponse
     {
         $validatedData = $request->validated();
 
