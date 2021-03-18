@@ -93,4 +93,15 @@ class TaskApiController extends Controller
 
         return response()->json(array('deleted' => true));
     }
+
+    public function getTaskSkills(Request $request)
+    {
+        $request->validate(array(
+            'task_id' => 'required|int'
+        ));
+
+        $skills = $this->getApiService()->getTaskSkills($request->get('task_id') ,true);
+
+        return response()->json($skills);
+    }
 }

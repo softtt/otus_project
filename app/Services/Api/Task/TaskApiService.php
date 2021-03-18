@@ -6,6 +6,7 @@ namespace App\Services\Api\Task;
 
 use App\Models\Task;
 use App\Services\Api\DTO\TaskDTO;
+use App\Services\Api\Translators\SkillTranslator;
 use App\Services\Api\Translators\TaskListTranslator;
 use App\Services\Api\Translators\TaskTranslator;
 use http\Exception\RuntimeException;
@@ -76,4 +77,30 @@ class TaskApiService
 
         $task->delete();
     }
+
+    public function getTaskSkills(int $taskId, bool $withPercentage = false): array
+    {
+        $task = Task::find($taskId);
+
+        if(is_null($task)) {
+            throw new \Psy\Exception\RuntimeException('Task not found');
+        }
+
+        $skills = $task->skills()->get();
+        $translator = new SkillTranslator();
+        $result = [];
+
+        foreach ($skills as $skill) {
+            if($withPercentage) {
+                $percentage = array('percent' => $skill->pivot->percent);
+                $result[] = array_merge($translator->translate($skill)->toArray(), $percentage);
+            } else {
+                $result[] = $translator->translate($skill)->toArray();
+            }
+        }
+
+        return $result;
+    }
+
+
 }

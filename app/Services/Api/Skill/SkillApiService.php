@@ -5,10 +5,14 @@ namespace App\Services\Api\Skill;
 
 
 use App\Models\Skill;
+use App\Models\Task;
 use App\Services\Api\DTO\SkillDTO;
 use App\Services\Api\Translators\SkillListTranslator;
 use App\Services\Api\Translators\SkillTranslator;
-use http\Exception\RuntimeException;
+use http\Env\Request;
+use Illuminate\Http\JsonResponse;
+use Psy\Exception\RuntimeException;
+
 
 class SkillApiService
 {
@@ -75,4 +79,33 @@ class SkillApiService
 
         $skill->delete();
     }
+
+    /**
+     * @param int $skillId
+     * @param int $taskId
+     */
+    public function addSkillToTask(int $skillId, int $taskId): JsonResponse
+    {
+        /**
+         * @var $skill Skill
+         * @var $task Task
+         */
+        $skill = Skill::find($skillId);
+
+        if(is_null($skill)) {
+            throw new \RuntimeException('Skill not found');
+        }
+
+        $task = Task::find($taskId);
+
+        if(is_null($task)) {
+            throw new RuntimeException('Task not found');
+        }
+
+        $task->skills()->attach($skillId);
+
+        return response()->json(array('added' => true));
+    }
+
+
 }

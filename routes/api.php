@@ -22,6 +22,17 @@ Route::middleware(\App\Http\Middleware\EnsureSignatureIsValid::class)->group(fun
         'lesson/addtocourse',
         [\App\Http\Controllers\Api\Lessons\ApiLessonController::class, 'addLessonToCourse']
     );
+
+    Route::post(
+        'skills/addtotask',
+        [\App\Http\Controllers\Api\Skills\SkillApiController::class, 'addSkillToTask']
+    );
+
+    Route::get(
+        'tasks/{task}/skills',
+        [\App\Http\Controllers\Api\Tasks\TaskApiController::class, 'getTaskSkills']
+    );
+
     Route::post(
         'level/addtocourse',
         [\App\Http\Controllers\Api\Levels\ApiLevelController::class, 'addLevelToCourse']

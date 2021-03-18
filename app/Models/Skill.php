@@ -18,4 +18,9 @@ class Skill extends Model
         'name',
         'description',
     ];
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class,'task_skill')->withPivot(array('percent'));
+    }
 }

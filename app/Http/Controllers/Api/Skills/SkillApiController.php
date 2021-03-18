@@ -94,4 +94,21 @@ class SkillApiController extends Controller
 
         return response()->json(array('deleted' => true));
     }
+
+    public function addSkillToTask(Request $request): JsonResponse
+    {
+        $request->validate(array(
+            'skill_id' => 'required|int',
+            'task_id' => 'required|int'
+        ));
+
+        $this->getApiService()->addSkillToTask(
+            $request->get('skill_id'),
+            $request->get('task_id')
+        );
+
+        return response()->json(array('added' =>true));
+    }
+
+
 }
