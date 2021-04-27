@@ -24,4 +24,14 @@ class Task extends Model
     {
         return $this->belongsToMany(Skill::class,'task_skill')->withPivot(array('percent'));
     }
+
+    public function students(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Student::class,'student_task')->withPivot(array(
+            'is_finished',
+            'tries',
+            'finish_until',
+            'mark'
+        ));
+    }
 }

@@ -35,15 +35,41 @@ class Student extends Model
         'email',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function courses(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Course::class,'courses_students')->withPivot('is_finished');
     }
 
-    public function finishedCourses()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tasks(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Course::class,'courses_students')->wherePivot('is_finished', true);
+        return $this->belongsToMany(Task::class,'student_task')->withPivot(array(
+            'is_finished',
+            'tries',
+            'finish_until',
+            'mark'
+        ));
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function skills(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class,'skill_student')->withPivot('percent');
+    }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function finishedCourses(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Course::class,'courses_students')
+            ->wherePivot('is_finished', true);
+    }
 }

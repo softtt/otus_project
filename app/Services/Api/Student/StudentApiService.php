@@ -14,6 +14,7 @@ use App\Services\Api\Translators\StudentTranslator;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use RuntimeException;
+use App\Services\Api\Translators\SkillTranslator;
 
 class StudentApiService
 {
@@ -127,6 +128,25 @@ class StudentApiService
 
         foreach ($courses as $course) {
             $result[] = $translator->translate($course)->toArray();
+        }
+
+        return $result;
+    }
+
+    public function getStudentSkills($studentId, bool $withPercentage): array
+    {
+        $student = Student::find($studentId);
+
+        if(is_null($student)) {
+            throw new RuntimeException('Student not found');
+        }
+
+        $skills = $student->skills()->get();
+        $translator = new SkillTranslator();
+        $result = [];
+
+        foreach ($skills as $skill) {
+            $result[] = $translator->translate($skill)->toArray();
         }
 
         return $result;

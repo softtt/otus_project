@@ -18,11 +18,18 @@ use Illuminate\Support\Str;
 class ApiStudentController extends Controller
 {
 
+    /**
+     * @return StudentApiService
+     */
     private function getApiService(): StudentApiService
     {
         return app(StudentApiService::class);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request): JsonResponse
     {
         $students = $this->getApiService()->getStudentsList(
@@ -33,6 +40,10 @@ class ApiStudentController extends Controller
         return response()->json($students);
     }
 
+    /**
+     * @param StudentStoreRequest $request
+     * @return JsonResponse
+     */
     public function store(StudentStoreRequest $request): JsonResponse
     {
         $data = $request->all();
@@ -46,6 +57,10 @@ class ApiStudentController extends Controller
         ]);
     }
 
+    /**
+     * @param int $studentId
+     * @return JsonResponse
+     */
     public function show(int $studentId): JsonResponse
     {
         $student = $this->getApiService()->getStudent($studentId);
@@ -57,6 +72,10 @@ class ApiStudentController extends Controller
         return response()->json($student->toArray());
     }
 
+    /**
+     * @param StudentUpdateRequest $request
+     * @return JsonResponse
+     */
     public function update(StudentUpdateRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
@@ -66,6 +85,10 @@ class ApiStudentController extends Controller
         return response()->json(array('updated' => true, 'student_id' => $request['student']));
     }
 
+    /**
+     * @param $studentId
+     * @return JsonResponse
+     */
     public function destroy($studentId): JsonResponse
     {
         $this->getApiService()->deleteStudent($studentId);
@@ -73,6 +96,10 @@ class ApiStudentController extends Controller
         return response()->json(array('deleted' => true, 'student_id' => $studentId));
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function subscribeForCourse(Request $request): JsonResponse
     {
         $request->validate(array(
@@ -88,6 +115,10 @@ class ApiStudentController extends Controller
         return response()->json(array('subscribed' => true));
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function getStudentCourses(Request $request): JsonResponse
     {
         $request->validate(array(
@@ -101,6 +132,10 @@ class ApiStudentController extends Controller
         return response()->json($courses);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function finishCourse(Request $request): JsonResponse
     {
         $request->validate(array(
